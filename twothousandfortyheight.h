@@ -6,7 +6,7 @@
 /*   By: xacoquan <xacoquan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/01 10:03:43 by xacoquan          #+#    #+#             */
-/*   Updated: 2015/03/01 19:20:13 by xacoquan         ###   ########.fr       */
+/*   Updated: 2015/03/01 20:18:56 by xacoquan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int		put_nbr_in_case(int **board, int r, int r2);
 int		rand_num(void);
 void 	tmp_board(int **board, int **tmp);
 int 	rand_pop_each(void);
-void	get_moove_keys(int **board, int ch2);
+void	get_moove_keys(int **board, int ch2, int **tmp);
 void    show_board(int **board, int maX, int maY);
 void	print_board(int **board, int maX, int maY);
 void	set_first_rand(int **board);

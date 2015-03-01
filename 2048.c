@@ -6,7 +6,7 @@
 /*   By: xacoquan <xacoquan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/28 00:51:11 by xacoquan          #+#    #+#             */
-/*   Updated: 2015/03/01 19:32:18 by xacoquan         ###   ########.fr       */
+/*   Updated: 2015/03/01 20:48:38 by xacoquan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,9 +155,12 @@ void 	tmp_board(int **board, int **tmp)
 	int y;
 
 	y = -1;
+	tmp = (int **)ft_memalloc(sizeof(int *) * 4);
 	while (++y < 4)
+
 	{
 		x = -1;
+		tmp[y] = (int *)ft_memalloc(sizeof(int) * 4);
 		while (++x < 4)
 			tmp[y][x] = board[y][x];
 	}
@@ -173,11 +176,10 @@ int 	rand_pop_each(void)
     return (2);
 }
 
-void	get_moove_keys(int **board, int ch2)
+void	get_moove_keys(int **board, int ch2, int **tmp)
 {
-	t_env *env;
 
-	while (ch2 != 27)
+	while (ch2 != 113)
 	{	
 		if (ch2 == 68)
 			move_left(board);
@@ -187,9 +189,9 @@ void	get_moove_keys(int **board, int ch2)
 			move_up(board);
 		else if (ch2 == 66)
 			move_down(board);
-		if (check_board(board, env->tmp))
+		if (check_board(board, tmp))
 			put_nbr_in_case(board, rand_num(), rand_pop_each());
-		else if (!check_board(board, env->tmp) && !no_z_case(board) && !check_move(board, env->tmp))
+		else if (!check_board(board, tmp) && !no_z_case(board) && !check_move(board, tmp))
 		{
 			mvprintw(50, 50 , "TA LOSE SALE MERDE");
 			break;
@@ -230,6 +232,9 @@ void	print_board(int **board, int maX, int maY)
 
 void	set_first_rand(int **board)
 {
+
+// getch == KEY_RESIZE
+
 	int x;
 	int	y;
 
@@ -237,8 +242,7 @@ void	set_first_rand(int **board)
 	while (++y < 4)
 	{
 		x = -1;
-		while (++x < 4)
-			board[y][x] = 0;
+		board[y] = (int *)ft_memalloc(sizeof(int) * 4);
 	}
 	srand(time(NULL));
 	board[rand() % 4][rand() % 4] = 2;
@@ -251,18 +255,22 @@ int 	main(int argc, char *argv[])
 	int y;
 	int ch;
 	initscr();
+	noecho();
+	
+
 	t_env *env;
 
-//	env = (t_env *)ft_memalloc(sizeof(t_env));
+	env = (t_env *)ft_memalloc(sizeof(t_env));
+	env->board = (int **)ft_memalloc(sizeof(int *) * 4);
 
 	set_first_rand(env->board);
 	getmaxyx(stdscr, y, x);
-	while (ch != 27)
+	while (ch != 113)
 	{
 		print_board(env->board, x, y);
 		tmp_board(env->board, env->tmp);
 		ch = getch();
-		get_moove_keys(env->board, ch);
+		get_moove_keys(env->board, ch, env->tmp);
 	}
 	endwin();
 	return (0);
