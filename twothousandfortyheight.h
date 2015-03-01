@@ -6,7 +6,7 @@
 /*   By: xacoquan <xacoquan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/01 10:03:43 by xacoquan          #+#    #+#             */
-/*   Updated: 2015/03/01 17:28:58 by xacoquan         ###   ########.fr       */
+/*   Updated: 2015/03/01 19:20:13 by xacoquan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,27 @@ typedef struct s_env
 }				t_env;
 
 
-int 	check_board(t_env *env);
-int 	check_case(t_env *env, int index, int *r, int num);
-int		put_nbr_in_case(t_env *env, int *r, int r2);
+int 	no_z_case(int **board);
+int 	check_board(int **board, int **tmp);
+int 	chheck_move(int **board, int **tmp);
+int		put_nbr_in_case(int **board, int r, int r2);
 int		rand_num(void);
-void 	tmp_board(t_env *env);
+void 	tmp_board(int **board, int **tmp);
 int 	rand_pop_each(void);
-void	get_moove_keys(t_env *env, ch2);
-void	print_board(t_env *env, int maX, int maY);
-void	set_first_rand(t_env *env);
-int 	no_z_case(t_env *env);
-int 	check_board(t_env *env);
+void	get_moove_keys(int **board, int ch2);
+void    show_board(int **board, int maX, int maY);
+void	print_board(int **board, int maX, int maY);
+void	set_first_rand(int **board);
 void	left_rec(int **board, int y);
 void	move_left(int **board);
 void	right_rec(int **board, int y);
 void	move_right(int **board);
-void	up_rec(int **board, int x);
-void	move_up(int **board);
+void	up_rec(int **env, int x);
+void 	move_up(int **board);
 void	down_rec(int **board, int x);
 void	move_down(int **board);
+void    ft_bzero(void *s, size_t n);
+void    *ft_memalloc(size_t size);
+
 
 #endif

@@ -6,14 +6,40 @@
 /*   By: xacoquan <xacoquan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/28 00:51:11 by xacoquan          #+#    #+#             */
-/*   Updated: 2015/03/01 17:42:58 by xacoquan         ###   ########.fr       */
+/*   Updated: 2015/03/01 19:32:18 by xacoquan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "twothousandfortyheight.h"
 
 
-int 	no_z_case(t_env *env)
+
+void    ft_bzero(void *s, size_t n)
+{
+    size_t      i;
+    char        *chg;
+
+    chg = s;
+    i = 0;
+    while (i < n)
+    {
+        chg[i] = 0;
+        i++;
+    }
+}
+
+void    *ft_memalloc(size_t size)
+{
+    void    *new;
+
+    new = malloc(sizeof(void*) * size);
+    if (new == NULL || size == 0)
+        return (NULL);
+    ft_bzero(new, size);
+    return (new);
+}
+
+int 	no_z_case(int **board)
 {
 	int y;
 	int x;
@@ -24,14 +50,14 @@ int 	no_z_case(t_env *env)
 		x = -1;
 		while (++x < 4)
 		{
-			if (env->board[y][x] == 0)
+			if (board[y][x] == 0)
 				return (1);
 		}
 	}
 	return (0);
 }
 
-int 	check_board(t_env *env, int **tmp)
+int 	check_board(int **board, int **tmp)
 {
 	int y;
 	int x;
@@ -42,59 +68,48 @@ int 	check_board(t_env *env, int **tmp)
 		x = -1;
 		while (++x < 4)
 		{
-			if (env->board[y][x] != tmp[y][x])
+			if (board[y][x] != tmp[y][x])
 				return (1);
 		}
 	}
 	return (0);
 }
 
-int check_move(t_env *env)
+int check_move(int **board, int **tmp)
 {
-	move_down(env->board);
-	if (check_board(env->board, env->tmp))
+	move_down(board);
+	if (check_board(board, tmp))
 	{
-		tmp_board(env->board, env->tmp);
+		tmp_board(board, tmp);
 		return (1);
 	}
-	tmp_board(env->board, env->tmp);
-	move_up(env->board);
-	if (check_board(env->board, env->tmp))
+	tmp_board(board, tmp);
+	move_up(board);
+	if (check_board(board, tmp))
 	{
-		tmp_board(env->board, env->tmp);
+		tmp_board(board, tmp);
 		return (1);
 	}
-	tmp_board(env->board, env->tmp);
-	move_left(env->board);
-	if (check_board(env->board, env->tmp))
+	tmp_board(board, tmp);
+	move_left(board);
+	if (check_board(board, tmp))
 	{
-		tmp_board(env->board, env->tmp);
+		tmp_board(board, tmp);
 		return (1);
 	}
-	tmp_board(env->board, env->tmp);
-	move_right(env->board);
-	if (check_board(env->board, env->tmp))
+	tmp_board(board, tmp);
+	move_right(board);
+	if (check_board(board, tmp))
 	{
-		tmp_board(env->board, env->tmp);
+		tmp_board(board, tmp);
 		return (1);
 	}
-	tmp_board(env->board, env->tmp);
+	tmp_board(board, tmp);
 	return (0);
 }
 
-int 	check_case(t_env *env, int index, int *r, int num )
-{
-	index = 1;
-	if (*r > 0)
-		return (*r--);
-	else
-	{
-		env->board[y][x] = num;
-		return (1);
-	}
-}
 
-int		put_nbr_in_case(t_env *env, int *r, int r2)
+int		put_nbr_in_case(int **board, int r, int r2)
 {
 	int x;
 	int y;
@@ -107,11 +122,18 @@ int		put_nbr_in_case(t_env *env, int *r, int r2)
 		x = -1;
 		while (++x < 4)
 		{
-			if (env->board[y][x] == 0 && (check_case([y][x], i, &r, r2)))
+			if (board[y][x] == 0)
 			{
-				return (1);
-			}	
-		}
+				i = 1;
+				if (r > 0)
+					(r--);
+				else
+				{
+					board[y][x] = r2;	
+					return (1);
+				}
+			}
+		}	
 		if (y == 3 && i == 1)
 		{
 			y = -1;
@@ -127,7 +149,7 @@ int		rand_num(void)
 	return (rand() % 24);
 }
 
-void 	tmp_board(t_env *env, t_env *env)
+void 	tmp_board(int **board, int **tmp)
 {
 	int x;
 	int y;
@@ -137,34 +159,37 @@ void 	tmp_board(t_env *env, t_env *env)
 	{
 		x = -1;
 		while (++x < 4)
-			env->tmp[y][x] = env->board[y][x];
+			tmp[y][x] = board[y][x];
 	}
 }
 
 int 	rand_pop_each(void)
 {
 	int r;
-	srand(time(null));
-	r = rand() % 2 + 1 ;
-	return (r);
+	srand(time(NULL));
+	r = rand() % 100;
+    if (r <= 10)
+        return (4);
+    return (2);
 }
 
-void	get_moove_keys(t_env *env, int ch2)
+void	get_moove_keys(int **board, int ch2)
 {
+	t_env *env;
+
 	while (ch2 != 27)
 	{	
 		if (ch2 == 68)
-			move_left(env->board);
+			move_left(board);
 		else if (ch2 == 67)
-			move_right(env->board);
+			move_right(board);
 		else if (ch2 == 65)
-			move_up(env->board);
+			move_up(board);
 		else if (ch2 == 66)
-			move_down(env->board);
-		if (check_board(env->board, env->tmp))
-			put_nbr_in_case(env->board, rand_num(), rand_pop_each());
-		else if (!check_board(env->board, env->tmp) /
-				&& !no_z_case(env->board) && !check_move(env->board, env->tmp))
+			move_down(board);
+		if (check_board(board, env->tmp))
+			put_nbr_in_case(board, rand_num(), rand_pop_each());
+		else if (!check_board(board, env->tmp) && !no_z_case(board) && !check_move(board, env->tmp))
 		{
 			mvprintw(50, 50 , "TA LOSE SALE MERDE");
 			break;
@@ -172,7 +197,24 @@ void	get_moove_keys(t_env *env, int ch2)
 	}
 }
 
-void	print_board(t_env *env, int maX, int maY)
+void    show_board(int **board, int maX, int maY)
+{
+    int x;
+    int y;
+
+    y = -1;
+    while (++y < 4)
+    {
+        x = -1;
+        while (++x < 4)
+        {
+            if (board[y][x])
+                mvprintw((y * 2 + 1) * maY, (x * 2 + 1) * maX, "%d", board[y][x]);
+        }
+    }
+}
+
+void	print_board(int **board, int maX, int maY)
 {
 	getmaxyx(stdscr, maY, maX);
 	wclear(stdscr);
@@ -183,10 +225,10 @@ void	print_board(t_env *env, int maX, int maY)
 	mvwvline(stdscr, 1, (maX / 4) * 1, 0, maY - 2);
 	mvwvline(stdscr, 1, (maX / 4) * 2, 0, maY - 2);
 	mvwvline(stdscr, 1, (maX / 4) * 3, 0, maY - 2);
-	show_board(env->board, maX / 8, maY / 8);
+	show_board(board, maX / 8, maY / 8);
 }
 
-void	set_first_rand(t_env *env)
+void	set_first_rand(int **board)
 {
 	int x;
 	int	y;
@@ -196,11 +238,11 @@ void	set_first_rand(t_env *env)
 	{
 		x = -1;
 		while (++x < 4)
-			env->board[y][x] = 0;
+			board[y][x] = 0;
 	}
 	srand(time(NULL));
-	env->board[rand() % 4][rand() % 4] = 2;
-	put_nbr_in_case(env->board, rand_num(), rand_pop_each());
+	board[rand() % 4][rand() % 4] = 2;
+	put_nbr_in_case(board, rand_num(), rand_pop_each());
 }
 
 int 	main(int argc, char *argv[]) 
@@ -210,6 +252,8 @@ int 	main(int argc, char *argv[])
 	int ch;
 	initscr();
 	t_env *env;
+
+//	env = (t_env *)ft_memalloc(sizeof(t_env));
 
 	set_first_rand(env->board);
 	getmaxyx(stdscr, y, x);

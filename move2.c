@@ -6,13 +6,13 @@
 /*   By: xacoquan <xacoquan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/02/28 11:32:32 by xacoquan          #+#    #+#             */
-/*   Updated: 2015/03/01 17:28:06 by xacoquan         ###   ########.fr       */
+/*   Updated: 2015/03/01 18:58:53 by xacoquan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "twothousandfortyheight.h"
 
-void	up_rec(int **env, int x)
+void	up_rec(int **board, int x)
 {
 	int y;
 
@@ -27,7 +27,7 @@ void	up_rec(int **env, int x)
 	}
 }
 
-void move_up(int **board)
+void 	move_up(int **board)
 {
 	int x;
 	int y;
